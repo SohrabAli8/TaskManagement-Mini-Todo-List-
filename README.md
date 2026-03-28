@@ -14,7 +14,7 @@ A professional, high-end Task Management application built with **.NET Core 10 (
 ### 2. Database Setup (MySQL)
 The application is configured to connect to MySQL with the following credentials (as requested):
 - **User**: `root`
-- **Password**: `810889`
+- **Password**: `0000000`
 - **Database**: `task_manager_db`
 
 The database schema is managed via **EF Core Migrations**. To verify or manually update the schema:
@@ -94,4 +94,3 @@ Task/
 - **Build Failures**: Run `dotnet build Backend` to see specific compiler errors if any modifications are made.
 
 ---
-Built with 💙 by Antigravity AI.
