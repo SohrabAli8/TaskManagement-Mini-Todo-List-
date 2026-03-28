@@ -1,0 +1,76 @@
+<div class="header-inner">
+  <div class="title-section">
+    <div class="icon-circle">
+      <svg fill="currentColor" viewBox="0 0 24 24">
+        <path d="M11 15.5l-3.5-3.5L9 10.6l2 2 4.4-4.4L16.8 9.6l-5.8 5.9zM12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/>
+      </svg>
+    </div>
+    <div class="info">
+      <h1 class="main-title">Task Management</h1>
+      <p class="count">{{ tasks.length }} total items</p>
+    </div>
+  </div>
+  <button routerLink="/add" class="btn-primary">
+    <span>+</span> Create New Task
+  </button>
+</div>
+
+<div class="grid-table">
+  <div class="grid-header">
+    <div class="col-status">Status</div>
+    <div class="col-task">Details</div>
+    <div class="col-date">Timeline</div>
+    <div class="col-actions">Actions</div>
+  </div>
+
+  <div class="grid-body">
+    <div *ngIf="loading" class="loader-container">
+      <div class="shimmer"></div>
+      <div class="shimmer"></div>
+      <div class="shimmer"></div>
+    </div>
+
+    <div *ngIf="!loading && tasks.length === 0" class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h3>Everything is Clear</h3>
+      <p>Enjoy your free time!</p>
+    </div>
+
+    <div *ngFor="let task of tasks; trackBy: trackById" class="row-card" [class.completed]="task.isCompleted">
+      <div class="col-status">
+          <div class="badge-status" [class.done]="task.isCompleted" (click)="toggleComplete(task)">
+              <div class="dot"></div>
+              <span>{{ task.isCompleted ? 'Done' : 'Pending' }}</span>
+          </div>
+      </div>
+      
+      <div class="col-task" [routerLink]="['/edit', task.id]">
+        <h3 class="task-title">{{ task.title }}</h3>
+        <p class="task-description">{{ task.description | slice:0:70 }}{{ task.description.length > 70 ? '...' : '' }}</p>
+      </div>
+
+      <div class="col-date">
+        <span class="day">{{ task.createdAt | date:'MMM dd' }}</span>
+        <span class="year">{{ task.createdAt | date:'yyyy, hh:mm a' }}</span>
+      </div>
+
+      <div class="col-actions">
+        <a [routerLink]="['/edit', task.id]" class="action-btn edit" title="Edit Task">✏️</a>
+        <button (click)="deleteTask($event, task.id)" class="action-btn delete" title="Remove Task">🗑️</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Professional Delete Modal -->
+<div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-icon">⚠️</div>
+    <h2>Confirm Deletion</h2>
+    <p>Are you sure you want to delete this task? This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="closeModal()">Cancel</button>
+      <button class="btn-danger" (click)="confirmDelete()">Delete Task</button>
+    </div>
+  </div>
+</div>
